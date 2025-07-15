@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floonya</title>
+    <style>
+        :root {
+            --primary-color: #8a63d2;
+            --secondary-color: #6d4bae;
+            --accent-color: #a78bfa;
+            --text-color: #e2e2e2;
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --light-color: #2d2d2d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Анимация волн */
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat no-repeat;
+            background-position: 0 bottom;
+            transform-origin: center bottom;
+            opacity: 0.15;
+        }
+        
+        .wave-1 {
+            background-size: 50% 80px;
+            animation: wave 12s linear infinite;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="white"/></svg>');
+        }
+        
+        .wave-2 {
+            background-size: 50% 100px;
+            animation: wave 18s linear infinite reverse;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" fill="white"/></svg>');
+            opacity: 0.1;
+        }
+        
+        .wave-3 {
+            background-size: 50% 80px;
+            animation: wave 25s linear infinite;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="white"/></svg>');
+            opacity: 0.05;
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(0) translateZ(0) scaleY(1); }
+            50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); }
+            100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--light-color);
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(138, 99, 210, 0.8), rgba(109, 75, 174, 0.9));
+            z-index: -1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            animation: fadeIn 1.2s ease-out;
+        }
+        
+        .photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+            border: 5px solid rgba(255,255,255,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        .photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        
+        .social-link {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.9);
+            color: var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            animation: fadeIn 1.7s ease-out;
+        }
+        
+        .social-link:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(167, 139, 250, 0.4);
+        }
+        
+        section {
+            background-color: var(--card-color);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            border: 1px solid var(--light-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .skill {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skill:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding-left: 20px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            border: 3px solid var(--card-color);
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover:before {
+            background-color: var(--accent-color);
+            transform: scale(1.2);
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: 25px;
+            bottom: -25px;
+            width: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        .timeline-date {
+            color: var(--accent-color);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 50px;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .waves {
+                height: 60px;
+            }
+        }
+        
+        /* Тумблер темной темы (для демонстрации) */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: var(--accent-color);
+        }
+        
+        .theme-toggle i {
+            color: white;
+            font-size: 1.2rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Анимация волн -->
+    <div class="waves">
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="wave wave-3"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <img src="https://via.placeholder.com/180" alt="Floonya" class="photo">
+            <h1>Floonya</h1>
+            <p class="tagline">Творческая личность с уникальным взглядом на мир</p>
+            <a href="https://t.me/floonya" class="social-link">
+                <i class="fab fa-telegram"></i> Написать в Telegram
+            </a>
+        </header>
+        
+        <section>
+            <h2>Обо мне</h2>
+            <p>Привет! Я Floonya - многогранная личность с широким кругом интересов. Моя жизнь - это постоянный процесс творчества, обучения и самовыражения. Я верю, что каждый день - это возможность создать что-то новое и вдохновляющее.</p>
+            <p>В своей работе и увлечениях я сочетаю технический подход с художественным видением, что позволяет мне находить нестандартные решения и создавать уникальные проекты.</p>
+        </section>
+        
+        <section>
+            <h2>Навыки</h2>
+            <div class="skills">
+                <span class="skill">Креативное мышление</span>
+                <span class="skill">Дизайн</span>
+                <span class="skill">Фотография</span>
+                <span class="skill">Копирайтинг</span>
+                <span class="skill">SMM</span>
+                <span class="skill">Веб-разработка</span>
+                <span class="skill">Аналитика</span>
+                <span class="skill">Организация проектов</span>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Опыт</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">2020 - настоящее время</span>
+                    <h3>Свободный художник и создатель контента</h3>
+                    <p>Разработка уникальных визуальных концепций, создание цифрового искусства, ведение творческих проектов в социальных сетях.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2018 - 2020</span>
+                    <h3>Дизайнер в Digital Studio</h3>
+                    <p>Создание фирменного стиля для брендов, разработка логотипов, участие в создании рекламных кампаний.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2016 - 2018</span>
+                    <h3>Начало творческого пути</h3>
+                    <p>Первые шаги в дизайне и фотографии, эксперименты с различными стилями и техниками.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Контакты</h2>
+            <p>Я всегда открыта для новых идей и сотрудничества. Вы можете связаться со мной через:</p>
+            <ul>
+                <li>Telegram: <a href="https://t.me/floonya">@floonya</a></li>
+                <li>Email: floonya@example.com</li>
+                <li>Социальные сети: @floonya (Instagram, Twitter)</li>
+            </ul>
+        </section>
+        
+        <footer>
+            <p>&copy; 2023 Floonya. Все права защищены.</p>
+        </footer>
+    </div>
+    
+    <!-- Кнопка переключения темы (декоративная) -->
+    <div class="theme-toggle" title="Переключить тему">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <script>
+        // Простая анимация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

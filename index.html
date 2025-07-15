@@ -14,6 +14,7 @@
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+            flex-direction: column;
         }
 
         .wave-container {
@@ -87,6 +88,13 @@
             transform: scale(0.98);
         }
 
+        .project-text {
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #888;
+        }
+
         @media (max-width: 768px) {
             .wave {
                 width: 50px;
@@ -112,6 +120,7 @@
             <div class="button-container">
                 <a href="https://www.tiktok.com/@MS4wLjABAAAAkY0K6Dxy62qNKkOOUZPwY4jwhlRv6-mBVCTGHikZHx-HWAUC43R6gbzHydUMJvIT?lang=ru-RU" class="social-button" target="_blank">TikTok</a>
                 <a href="https://t.me/LIVEEWIRE" class="social-button" target="_blank">Telegram</a>
+                <a href="https://t.me/floonyabio" class="social-button" target="_blank">Telegram bio</a>
                 <a href="https://steamcommunity.com/id/zoryys/" class="social-button" target="_blank">Steam main</a>
                 <a href="https://steamcommunity.com/id/floonya" class="social-button" target="_blank">Steam twink</a>
                 <a href="https://on.soundcloud.com/AI7ZlGQ2hLqUWZ5zD7" class="social-button" target="_blank">SoundCloud main playlist</a>
@@ -121,6 +130,8 @@
         
         <div class="wave wave-right"></div>
     </div>
+
+    <div class="project-text">my project: empty shop</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
